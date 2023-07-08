@@ -52,6 +52,36 @@ class DQN:
         loss = F.mse_loss(r_batch + self.discount * next_qvals * (1 - d_batch), qvals)
         return loss
 
+"""
+class DoubleDQN:
+    def __init__(self, dim_state=None, num_action=None, discount=0.9):
+        self.discount = discount
+        self.Q = QNet(dim_state, num_action)
+        self.target_Q = QNet(dim_state, num_action)
+        self.target_Q.load_state_dict(self.Q.state_dict())
+
+    def get_action(self, state):
+        qvals = self.Q(state)
+        return qvals.argmax()
+
+
+    # DoubleDQN 与 DQN 的区别在于 DoubleDQN是由Q选择动作，然后让target-Q来评分。而DQN是由target-Q来选动作，并让target-Q来评分，会造成高估
+    # DoubleDQN的本质在于解耦。Q选动作，target-Q来评分避免高估。
+    def compute_loss(self, s_batch, a_batch, r_batch, d_batch, next_s_batch):
+        # Compute Q-values for current states
+        qvals = self.Q(s_batch).gather(1, a_batch.unsqueeze(1)).squeeze()
+
+        # Select best actions for next states using the online network
+        next_actions = self.Q(next_s_batch).argmax(dim=1)
+
+        # Evaluate the selected actions using the target network
+        next_qvals = self.target_Q(next_s_batch).gather(1, next_actions.unsqueeze(1)).squeeze()
+
+        # Compute loss
+        loss = F.mse_loss(r_batch + self.discount * next_qvals * (1 - d_batch), qvals)
+        return loss
+"""
+
 
 def soft_update(target, source, tau=0.01):
     """
