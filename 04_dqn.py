@@ -83,6 +83,7 @@ class DoubleDQN:
 """
 
 
+# soft_update是慢慢的改变target-Q使之向Q靠拢。也可以每更新100步，直接用Q替换掉target-Q。
 def soft_update(target, source, tau=0.01):
     """
     update target by target = tau * source + (1 - tau) * target.
@@ -143,7 +144,7 @@ def train(args, env, agent):
 
     epsilon = 1
     epsilon_max = 1
-    epsilon_min = 0.1
+    epsilon_min = 0.1 # 10%的概率随机动作进行探索。
     episode_reward = 0
     episode_length = 0
     max_episode_reward = -float("inf")
