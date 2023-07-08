@@ -47,7 +47,7 @@ class DQN:
         # 计算s_batch，a_batch对应的值。
         qvals = self.Q(s_batch).gather(1, a_batch.unsqueeze(1)).squeeze()
         # 使用target Q网络计算next_s_batch对应的值。
-        next_qvals, _ = self.target_Q(next_s_batch).detach().max(dim=1)
+        next_qvals, _ = self.target_Q(next_s_batch).detach().max(dim=1)  # detach就是隔绝反向传播梯度更新
         # 使用MSE计算loss。
         loss = F.mse_loss(r_batch + self.discount * next_qvals * (1 - d_batch), qvals)
         return loss
